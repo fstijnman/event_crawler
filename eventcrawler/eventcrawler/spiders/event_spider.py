@@ -67,3 +67,15 @@ class ShelterSpider(scrapy.Spider):
                 '//div[@class="wpb_text_column wpb_content_element  links"]/div/p/a/@href'
             ).getall(),
         }
+
+
+class DokaSpider(scrapy.Spider):
+    name = "doka"
+
+    def start_requests(self):
+        url = "https://www.volkshotel.nl/nl/agenda/doka/"
+
+        yield scrapy.Request(url=url, callback=self.parse)
+
+    def parse_event(self, response):
+        yield {"event_name"}
