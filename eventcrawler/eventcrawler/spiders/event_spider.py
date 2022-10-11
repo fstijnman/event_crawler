@@ -77,5 +77,73 @@ class DokaSpider(scrapy.Spider):
 
         yield scrapy.Request(url=url, callback=self.parse)
 
+    def parse(self, response):
+        yield from response.follow_all(
+            response.xpath("//a[contains(@href, 'doka')]/@href").getall(),
+            self.parse_event,
+        )
+
     def parse_event(self, response):
-        yield {"event_name"}
+        yield {
+            "event_name": response.xpath(
+                "//div[contains(@class, 'meta-container')]/h1/text()"
+            ).getall(),
+            "event_date": response.xpath(
+                "//div[contains(@class, 'sidebar-block agenda-sidebar__information')]/div/table/tbody/tr/td/text()"
+            ).getall(),
+            "event_time": response.xpath(
+                "//div[contains(@class, 'sidebar-block agenda-sidebar__information')]/div/table/tbody/tr/td/text()"
+            ).getall(),
+            "event_description": response.xpath(
+                "//article[contains(@class, 'post flowing-text')]/div[contains(@class, 'excerpt')]/p/text()"
+            ).getall(),
+            "event_url": response.url,
+            "event_ticket_url": response.xpath(
+                "//div[contains(@class, 'sidebar-block buy-attend__wrapper')]/a/@href"
+            ).get(),
+        }
+
+
+class Skatecafespider(scrapy.Spider):
+    name = "skatecafe"
+
+    def start_requests(self):
+        url = "https://skatecafe.weticket.com/"
+
+        yield scrapy.Request(url=url, callback=self.parse)
+
+    def parse(self, response):
+        yield from response.follow_all(
+            response.xpath(
+                "//a[contains(@class, 'order-process-btn mt-auto')]/@href"
+            ).getall(),
+            self.parse_event,
+        )
+
+    def parse_event(self, response):
+        yield {
+            "event_name": response.xpath(
+                "//div[contains(@class, 'col-12 brandcolor')]/h2/text()"
+            ).getall(),
+            "event_description": response.xpath(
+                "//div[contains(@class, 'col-12 secondary-text-color')]/text()"
+            ).getall(),
+            "event_url": "https://skatecafe.weticket.com/" + response.url,
+            "event_ticket_url": response.xpath(
+                "//a[contains(@class, 'btn mgc-btns-fr-ppp brandbutton buttonTextColor w-100')]/@href"
+            ).get(),
+        }
+
+
+class Clubatelierspider(scrapy.Spider):
+    name = "clubatelier"
+
+    def start_requests(self):
+        url = "https://www.club-atelier.nl/agenda/"
+
+        yield scrapy.Request(url=url, callback=self.parse)
+
+    def parse(self, response):
+        yield {
+            # "event_names"
+        }
