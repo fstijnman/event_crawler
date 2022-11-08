@@ -135,7 +135,7 @@ class Skatecafespider(scrapy.Spider):
         }
 
 
-class Clubatelierspider(scrapy.Spider):
+class ClubAtelierSpider(scrapy.Spider):
     name = "clubatelier"
 
     def start_requests(self):
