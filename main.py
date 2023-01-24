@@ -123,9 +123,9 @@ def main():
     today = datetime.date.today()
 
     # test_paradiso(today)
-    # test_melkweg(today)
+    test_melkweg(today)
     # test_lovelee(today)
-    test_radioradio(today)
+    # test_radioradio(today)
 
 
 if __name__ == "__main__":
